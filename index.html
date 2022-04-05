@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+
+
+</head>
+
+
+<body style="text-align: center; padding-top: 100px;">
+    <h1 >Random Qoutes <button id="btn-clear" onclick="clearResult()">Clear</button></h1>
+    <h3 id="status">status: </h3>
+    <h3 id="message">message: </h3>
+    <button id="button" onclick="loadContent()">Load Content</button>
+
+    <script>
+        function loadContent() {
+            var xhr = new XMLHttpRequest();
+            var url = "https://goquotes-api.herokuapp.com/api/v1/all/quotes";
+
+            xhr.onloadstart = function () {
+                document.getElementById("button").innerHTML = "Loading...";
+            }
+
+            xhr.onerror = function () {
+                alert("Gagal mengambil data");
+            };
+
+            xhr.onloadend = function () {
+                if (this.responseText !== "") {
+                    var data = JSON.parse(this.responseText);
+
+                    var sts = document.createElement("h3");
+                    sts.innerHTML = data.status;
+
+                    var msg = document.createElement("h3");
+                    msg.innerHTML = data.message;
+
+                    document.getElementById("status").append(sts);
+                    document.getElementById("message").append(msg);
+                    document.getElementById("button").innerHTML = "Done";
+
+                    setTimeout(function () {
+                        document.getElementById("button").innerHTML = "Load Lagi";
+                    }, 3000);
+                }
+            };
+
+            xhr.open("GET", url, true);
+            xhr.send();
+        }
+
+        function clearResult() {
+            document.getElementById("status", "message").innerHTML = "";
+        }
+    </script>
+</body>
+
+
+
+</html>
